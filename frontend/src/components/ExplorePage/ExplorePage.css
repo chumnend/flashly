@@ -1,0 +1,163 @@
+/*  Layout */
+
+.explore {
+  min-height: calc(100vh - 64px);
+  background: #0a0a0a;
+  color: #f0f0f0;
+}
+
+/*  Hero  */
+
+.explore__hero {
+  padding: 4rem 2rem 2.5rem;
+  max-width: 860px;
+  margin: 0 auto;
+  animation: fadeUp 0.5s ease both;
+}
+
+.explore__title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -1.5px;
+  color: #f0f0f0;
+  margin: 0 0 0.5rem;
+}
+
+.explore__subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0 0 1.75rem;
+}
+
+/*  Search    */
+
+.explore__search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.explore__search-icon {
+  position: absolute;
+  left: 0.9rem;
+  font-size: 1.1rem;
+  color: #444;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.explore__search {
+  width: 100%;
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #f0f0f0;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.explore__search::placeholder {
+  color: #444;
+}
+
+.explore__search:focus {
+  border-color: #c8ff5e;
+  box-shadow: 0 0 0 3px rgba(200, 255, 94, 0.07);
+}
+
+.explore__search-clear {
+  position: absolute;
+  right: 0.9rem;
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.explore__search-clear:hover {
+  color: #f0f0f0;
+}
+
+/*  Body  */
+
+.explore__body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem 2rem 4rem;
+}
+
+.explore__count {
+  font-size: 0.8rem;
+  color: #444;
+  margin: 0 0 1.25rem;
+}
+
+/*  Grid  */
+
+.explore__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+/*  States    */
+
+.explore__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 5rem 2rem;
+  color: #555;
+  text-align: center;
+}
+
+.explore__state--error {
+  color: #ff6b6b;
+}
+
+.explore__empty-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.explore__empty-sub {
+  font-size: 0.875rem;
+  color: #555;
+  margin: 0;
+}
+
+/*  Spinner  */
+
+.explore__spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #2a2a2a;
+  border-top-color: #c8ff5e;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-bottom: 0.5rem;
+}
+
+/*  Animations    */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

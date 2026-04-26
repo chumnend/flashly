@@ -4,10 +4,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import App from './components/App';
 import ProtectedRoute from './components/ProtectedRoute';
-import ErrorPage from './components/ErrorPage';
+import ErrorPage from './components/ErrorPage/ErrorPage';
 import HomePage from './components/HomePage';
-import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
+import LoginPage from './components/Auth/LoginPage';
+import RegisterPage from './components/Auth/RegisterPage';
 import ExplorePage from './components/ExplorePage';
 import DeckPage from './components/DeckPage';
 import DeckManagerPage from './components/DeckManagerPage';

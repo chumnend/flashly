@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap');
+
+.deck-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: #0f0f0f;
+    border: 1px solid #1f1f1f;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    animation: cardIn 0.4s ease both;
+}
+
+.deck-card:hover {
+    border-color: #c8ff5e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(200, 255, 94, 0.08);
+}
+
+.deck-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.deck-card__name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #f0f0f0;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.deck-card__rating {
+    font-size: 0.7rem;
+    color: #c8ff5e;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.deck-card__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.deck-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.deck-card__stat {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.deck-card__tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.deck-card__tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #888;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
