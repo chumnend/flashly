@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { type Deck } from '../../services/flashly';
-
+import type { Deck } from '../../services/flashly';
 import './DeckCard.css';
 
 interface DeckCardProps {
@@ -28,13 +27,13 @@ const DeckCard = ({ deck }: DeckCardProps) => {
 
       <div className="deck-card__footer">
         <span className="deck-card__stat">{deck.cardsCount} cards</span>
-        {deck.categories.length > 0 && (
-          <div className="deck-card__tags">
-            {deck.categories.slice(0, 3).map(cat => (
-              <span key={cat.id} className="deck-card__tag">{cat.name}</span>
-            ))}
-          </div>
-        )}
+          {(deck.categories ?? []).length > 0 && (
+            <div className="deck-card__tags">
+              {(deck.categories ?? []).slice(0, 3).map(cat => (
+                <span key={cat.id} className="deck-card__tag">{cat.name}</span>
+              ))}
+            </div>
+          )}
       </div>
     </Link>
   );

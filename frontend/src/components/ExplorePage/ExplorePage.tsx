@@ -32,7 +32,7 @@ const ExplorePage = () => {
   const filtered = decks.filter(deck =>
     deck.name.toLowerCase().includes(search.toLowerCase()) ||
     deck.description?.toLowerCase().includes(search.toLowerCase()) ||
-    deck.categories.some(c => c.name.toLowerCase().includes(search.toLowerCase()))
+    (deck.categories ?? []).some(c => c.name.toLowerCase().includes(search.toLowerCase()))
   );
  
   return (

@@ -41,8 +41,8 @@ export interface Deck {
   createdAt: string;
   updatedAt: string;
   cardsCount: number;
-  cards: Card[];
-  categories: Category[];
+  cards: Card[] | undefined;
+  categories: Category[] | undefined;
 }
  
 export interface UserDetails {
