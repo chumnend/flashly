@@ -1,9 +1,16 @@
+import { Outlet, ScrollRestoration } from 'react-router-dom';
+
+import AuthProvider from '../providers/AuthProvider';
+
 const App = () => {
   return (
-    <div className='app'>
-      Flashly
-    </div>
-  )
-}
-
-export default App
+    <AuthProvider>
+      <ScrollRestoration />
+      <main>
+        <Outlet />
+      </main>
+    </AuthProvider>
+  );
+};
+ 
+export default App;
