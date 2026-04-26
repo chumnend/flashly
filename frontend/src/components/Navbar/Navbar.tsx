@@ -34,7 +34,7 @@ const Navbar = () => {
               to={`/profile/${user?.id}`}
               className={({ isActive }) => isActive ? 'navbar__link navbar__link--active' : 'navbar__link'}
             >
-                {user?.firstName}
+                Your Profile
             </NavLink>
             <NavLink to="/settings" className={({ isActive }) => isActive ? 'navbar__link navbar__link--active' : 'navbar__link'}>
                 Settings
