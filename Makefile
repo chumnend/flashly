@@ -1,5 +1,11 @@
 .PHONY: help install install-dev dev build clean clean-dist test migrate check fix
 
+venv:
+	ifeq ("$(wildcard '/venv')", "")
+		python -m venv venv
+	endif
+	source venv/bin/activate
+
 help:
 	@echo "Available commands:"
 	@echo "  Development:"
