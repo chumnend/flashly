@@ -38,6 +38,8 @@ export interface Deck {
   description: string;
   publishStatus: "public" | "private";
   rating: number;
+  owner: string;
+  ownerId: string;
   createdAt: string;
   updatedAt: string;
   cardsCount: number;

@@ -9,7 +9,7 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/Auth/LoginPage';
 import RegisterPage from './components/Auth/RegisterPage';
 import ExplorePage from './components/ExplorePage';
-import DeckPage from './components/DeckPage';
+import DeckPage from './components/DeckPage/DeckPage';
 import DeckManagerPage from './components/DeckManagerPage';
 import FeedPage from './components/FeedPage';
 import DecksPage from './components/DecksPage';
