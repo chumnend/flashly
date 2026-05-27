@@ -1,1 +1,1 @@
-export { default } from './DeckCard';
+export { default } from './DeckCard'

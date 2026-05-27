@@ -1,106 +1,112 @@
 .error-page {
-  position: relative;
-  min-height: calc(100vh - 64px);
-  background: #0a0a0a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  overflow: hidden;
+    position: relative;
+    min-height: calc(100vh - 64px);
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden;
 }
 
 .error-page__grid {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
-  background-size: 32px 32px;
-  opacity: 0.5;
-  pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 /*  Content   */
 
 .error-page__content {
-  position: relative;
-  text-align: center;
-  animation: fadeUp 0.5s ease both;
+    position: relative;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
 }
 
 /* Large ghost status code sitting behind everything */
 .error-page__code {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: clamp(8rem, 22vw, 16rem);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px #1f1f1f;
-  letter-spacing: -8px;
-  user-select: none;
-  margin-bottom: -1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(8rem, 22vw, 16rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px #1f1f1f;
+    letter-spacing: -8px;
+    user-select: none;
+    margin-bottom: -1.5rem;
 }
 
 .error-page__title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
-  letter-spacing: -1px;
-  color: #f0f0f0;
-  margin: 0 0 0.75rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    letter-spacing: -1px;
+    color: #f0f0f0;
+    margin: 0 0 0.75rem;
 }
 
 .error-page__message {
-  font-size: 0.95rem;
-  color: #555;
-  margin: 0 0 2.5rem;
-  max-width: 360px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0 0 2.5rem;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
 }
 
 /*  Actions   */
 
 .error-page__actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .error-page__btn {
-  display: inline-block;
-  padding: 0.7rem 1.5rem;
-  border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
 }
 
 .error-page__btn--primary {
-  background: #c8ff5e;
-  color: #0a0a0a;
+    background: #c8ff5e;
+    color: #0a0a0a;
 }
 
 .error-page__btn--primary:hover {
-  background: #d6ff7a;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(200, 255, 94, 0.2);
+    background: #d6ff7a;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(200, 255, 94, 0.2);
 }
 
 .error-page__btn--ghost {
-  color: #666;
+    color: #666;
 }
 
 .error-page__btn--ghost:hover {
-  color: #f0f0f0;
+    color: #f0f0f0;
 }
 
 /*  Animation */
 
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

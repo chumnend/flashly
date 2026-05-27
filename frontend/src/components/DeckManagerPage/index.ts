@@ -1,1 +1,1 @@
-export { default } from './DeckManagerPage';
+export { default } from './DeckManagerPage'
