@@ -13,7 +13,7 @@ import DeckPage from './components/DeckPage/DeckPage';
 import DeckManagerPage from './components/DeckManagerPage';
 import FeedPage from './components/FeedPage';
 import DecksPage from './components/DecksPage';
-import ProfilePage from './components/ProfilePage';
+import ProfilePage from './components/ProfilePage/ProfilePage';
 import SettingsPage from './components/SettingsPage';
 
 import './index.css';
