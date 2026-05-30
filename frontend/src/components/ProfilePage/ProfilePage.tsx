@@ -1,81 +1,81 @@
-import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider'
+import { useAuth } from '../../providers/AuthProvider';
 import {
     getProfile,
     updateUser,
     follow,
     unfollow,
-} from '../../services/flashly'
+} from '../../services/flashly';
 import type {
     GetProfileResponse,
     UpdateUserRequest,
-} from '../../services/flashly'
+} from '../../services/flashly';
 
-import DeckCard from '../DeckCard'
-import './ProfilePage.css'
+import DeckCard from '../DeckCard';
+import './ProfilePage.css';
 
-type Tab = 'decks' | 'about'
+type Tab = 'decks' | 'about';
 
 const ProfilePage = () => {
-    const { userId } = useParams<{ userId: string }>()
-    const { user: authUser, token } = useAuth()
+    const { userId } = useParams<{ userId: string }>();
+    const { user: authUser, token } = useAuth();
 
-    const [profile, setProfile] = useState<GetProfileResponse | null>(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [profile, setProfile] = useState<GetProfileResponse | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const [tab, setTab] = useState<Tab>('decks')
+    const [tab, setTab] = useState<Tab>('decks');
 
     // Edit mode
-    const [editing, setEditing] = useState(false)
-    const [editForm, setEditForm] = useState<UpdateUserRequest>({})
-    const [saving, setSaving] = useState(false)
-    const [saveError, setSaveError] = useState<string | null>(null)
+    const [editing, setEditing] = useState(false);
+    const [editForm, setEditForm] = useState<UpdateUserRequest>({});
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
 
     // Follow
-    const [following, setFollowing] = useState(false)
-    const [followLoading, setFollowLoading] = useState(false)
+    const [following, setFollowing] = useState(false);
+    const [followLoading, setFollowLoading] = useState(false);
 
-    const isOwnProfile = authUser?.id === userId
+    const isOwnProfile = authUser?.id === userId;
 
     useEffect(() => {
-        if (!userId) return
+        if (!userId) return;
 
         const fetchProfile = async () => {
-            setLoading(true)
-            const result = await getProfile(userId)
+            setLoading(true);
+            const result = await getProfile(userId);
             if ('error' in result) {
-                setError(result.error)
+                setError(result.error);
             } else {
-                setProfile(result)
+                setProfile(result);
                 setEditForm({
                     firstName: result.user.firstName,
                     lastName: result.user.lastName,
                     username: result.user.username,
                     email: result.user.email,
                     aboutMe: result.userDetails.aboutMe,
-                })
+                });
             }
-            setLoading(false)
-        }
+            setLoading(false);
+        };
 
-        fetchProfile()
-    }, [userId])
+        fetchProfile();
+    }, [userId]);
 
     const openEdit = () => {
-        setSaveError(null)
-        setEditing(true)
-    }
+        setSaveError(null);
+        setEditing(true);
+    };
 
     const handleSave = async () => {
-        if (!userId || !token) return
-        setSaving(true)
-        setSaveError(null)
-        const result = await updateUser(userId, token, editForm)
+        if (!userId || !token) return;
+        setSaving(true);
+        setSaveError(null);
+        const result = await updateUser(userId, token, editForm);
         if ('error' in result) {
-            setSaveError(result.error)
+            setSaveError(result.error);
         } else {
             setProfile((prev) =>
                 prev
@@ -88,20 +88,20 @@ const ProfilePage = () => {
                           },
                       }
                     : prev,
-            )
-            setEditing(false)
+            );
+            setEditing(false);
         }
-        setSaving(false)
-    }
+        setSaving(false);
+    };
 
     const handleFollow = async () => {
-        if (!token || !userId) return
-        setFollowLoading(true)
+        if (!token || !userId) return;
+        setFollowLoading(true);
         const result = following
             ? await unfollow(userId, token)
-            : await follow(userId, token)
+            : await follow(userId, token);
         if (!('error' in result)) {
-            setFollowing((f) => !f)
+            setFollowing((f) => !f);
             setProfile((prev) =>
                 prev
                     ? {
@@ -114,17 +114,17 @@ const ProfilePage = () => {
                           },
                       }
                     : prev,
-            )
+            );
         }
-        setFollowLoading(false)
-    }
+        setFollowLoading(false);
+    };
 
     if (loading) {
         return (
             <div className="pp__loading">
                 <div className="pp__spinner" />
             </div>
-        )
+        );
     }
 
     if (error || !profile) {
@@ -135,14 +135,14 @@ const ProfilePage = () => {
                     ← Explore
                 </Link>
             </div>
-        )
+        );
     }
 
-    const { user, userDetails, decks, statistics } = profile
-    const initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
+    const { user, userDetails, decks, statistics } = profile;
+    const initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
     const publicDecks = decks.filter(
         (d) => d.publishStatus === 'public' || isOwnProfile,
-    )
+    );
 
     return (
         <div className="pp">
@@ -421,7 +421,7 @@ const ProfilePage = () => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default ProfilePage
+export default ProfilePage;

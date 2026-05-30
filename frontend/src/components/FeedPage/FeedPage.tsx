@@ -1,38 +1,38 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import * as Flashly from '../../services/flashly'
-import { type Deck } from '../../services/flashly'
-import { useAuth } from '../../providers/AuthProvider'
-import DeckCard from '../DeckCard'
+import * as Flashly from '../../services/flashly';
+import { type Deck } from '../../services/flashly';
+import { useAuth } from '../../providers/AuthProvider';
+import DeckCard from '../DeckCard';
 
-import './FeedPage.css'
+import './FeedPage.css';
 
 const FeedPage = () => {
-    const { token } = useAuth()
+    const { token } = useAuth();
 
-    const [decks, setDecks] = useState<Deck[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [decks, setDecks] = useState<Deck[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const load = async () => {
-            if (!token) return
+            if (!token) return;
 
-            setLoading(true)
+            setLoading(true);
 
-            const result = await Flashly.getFeed(token)
+            const result = await Flashly.getFeed(token);
             if ('error' in result) {
-                setError(result.error)
+                setError(result.error);
             } else {
-                setDecks(result.decks)
+                setDecks(result.decks);
             }
 
-            setLoading(false)
-        }
+            setLoading(false);
+        };
 
-        load()
-    }, [token])
+        load();
+    }, [token]);
 
     return (
         <div className="feed">
@@ -98,7 +98,7 @@ const FeedPage = () => {
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default FeedPage
+export default FeedPage;

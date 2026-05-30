@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider'
+import { useAuth } from '../../providers/AuthProvider';
 
-import './HomePage.css'
+import './HomePage.css';
 
 const features = [
     {
@@ -21,10 +21,10 @@ const features = [
         title: 'Track your progress',
         description: 'See success rates and review counts grow as you study.',
     },
-]
+];
 
 const HomePage = () => {
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated } = useAuth();
 
     return (
         <div className="home">
@@ -108,7 +108,7 @@ const HomePage = () => {
                 </section>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;

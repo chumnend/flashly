@@ -1,1 +1,1 @@
-export { default } from './DecksPage'
+export { default } from './DecksPage';

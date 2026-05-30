@@ -1,7 +1,7 @@
-import { Outlet, ScrollRestoration } from 'react-router-dom'
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 
-import Navbar from './Navbar'
-import AuthProvider from '../providers/AuthProvider'
+import Navbar from './Navbar';
+import AuthProvider from '../providers/AuthProvider';
 
 const App = () => {
     return (
@@ -12,7 +12,7 @@ const App = () => {
                 <Outlet />
             </main>
         </AuthProvider>
-    )
-}
+    );
+};
 
-export default App
+export default App;

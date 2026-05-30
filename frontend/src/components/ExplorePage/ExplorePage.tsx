@@ -1,33 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import * as Flashly from '../../services/flashly'
-import { type Deck } from '../../services/flashly'
-import DeckCard from '../DeckCard'
+import * as Flashly from '../../services/flashly';
+import { type Deck } from '../../services/flashly';
+import DeckCard from '../DeckCard';
 
-import './ExplorePage.css'
+import './ExplorePage.css';
 
 const ExplorePage = () => {
-    const [decks, setDecks] = useState<Deck[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-    const [search, setSearch] = useState('')
+    const [decks, setDecks] = useState<Deck[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         const load = async () => {
-            setLoading(true)
+            setLoading(true);
 
-            const result = await Flashly.exploreDecks()
+            const result = await Flashly.exploreDecks();
             if ('error' in result) {
-                setError(result.error)
+                setError(result.error);
             } else {
-                setDecks(result.decks)
+                setDecks(result.decks);
             }
 
-            setLoading(false)
-        }
+            setLoading(false);
+        };
 
-        load()
-    }, [])
+        load();
+    }, []);
 
     const filtered = decks.filter(
         (deck) =>
@@ -36,7 +36,7 @@ const ExplorePage = () => {
             (deck.categories ?? []).some((c) =>
                 c.name.toLowerCase().includes(search.toLowerCase()),
             ),
-    )
+    );
 
     return (
         <div className="explore">
@@ -111,7 +111,7 @@ const ExplorePage = () => {
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ExplorePage
+export default ExplorePage;

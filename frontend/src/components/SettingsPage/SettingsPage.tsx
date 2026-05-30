@@ -1,17 +1,17 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { updateUser, changePassword } from '../../services/flashly'
-import type { UpdateUserRequest } from '../../services/flashly'
-import { useAuth } from '../../providers/AuthProvider'
-import './SettingsPage.css'
+import { updateUser, changePassword } from '../../services/flashly';
+import type { UpdateUserRequest } from '../../services/flashly';
+import { useAuth } from '../../providers/AuthProvider';
+import './SettingsPage.css';
 
-type Section = 'profile' | 'email' | 'password'
-type SaveState = 'idle' | 'saving' | 'success' | 'error'
+type Section = 'profile' | 'email' | 'password';
+type SaveState = 'idle' | 'saving' | 'success' | 'error';
 
 const SettingsPage = () => {
-    const { user, token, logout } = useAuth()
+    const { user, token, logout } = useAuth();
 
-    const [activeSection, setActiveSection] = useState<Section>('profile')
+    const [activeSection, setActiveSection] = useState<Section>('profile');
 
     // ── Profile ───────────────────────────────────────────
     const [profileForm, setProfileForm] = useState<UpdateUserRequest>({
@@ -19,115 +19,115 @@ const SettingsPage = () => {
         lastName: user?.lastName ?? '',
         username: user?.username ?? '',
         aboutMe: '',
-    })
-    const [profileState, setProfileState] = useState<SaveState>('idle')
-    const [profileError, setProfileError] = useState<string | null>(null)
+    });
+    const [profileState, setProfileState] = useState<SaveState>('idle');
+    const [profileError, setProfileError] = useState<string | null>(null);
 
     // ── Email ─────────────────────────────────────────────
     const [emailForm, setEmailForm] = useState({
         newEmail: '',
         confirmEmail: '',
         currentPassword: '',
-    })
-    const [emailState, setEmailState] = useState<SaveState>('idle')
-    const [emailError, setEmailError] = useState<string | null>(null)
+    });
+    const [emailState, setEmailState] = useState<SaveState>('idle');
+    const [emailError, setEmailError] = useState<string | null>(null);
 
     // ── Password ──────────────────────────────────────────
     const [passwordForm, setPasswordForm] = useState({
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
-    })
-    const [passwordState, setPasswordState] = useState<SaveState>('idle')
-    const [passwordError, setPasswordError] = useState<string | null>(null)
+    });
+    const [passwordState, setPasswordState] = useState<SaveState>('idle');
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     // ── Handlers ──────────────────────────────────────────
     const handleSaveProfile = async () => {
-        if (!user || !token) return
-        setProfileState('saving')
-        setProfileError(null)
-        const result = await updateUser(user.id, token, profileForm)
+        if (!user || !token) return;
+        setProfileState('saving');
+        setProfileError(null);
+        const result = await updateUser(user.id, token, profileForm);
         if ('error' in result) {
-            setProfileError(result.error)
-            setProfileState('error')
+            setProfileError(result.error);
+            setProfileState('error');
         } else {
-            setProfileState('success')
-            setTimeout(() => setProfileState('idle'), 3000)
+            setProfileState('success');
+            setTimeout(() => setProfileState('idle'), 3000);
         }
-    }
+    };
 
     const handleSaveEmail = async () => {
-        if (!user || !token) return
+        if (!user || !token) return;
         if (!emailForm.newEmail.trim()) {
-            setEmailError('Email is required.')
-            setEmailState('error')
-            return
+            setEmailError('Email is required.');
+            setEmailState('error');
+            return;
         }
         if (emailForm.newEmail !== emailForm.confirmEmail) {
-            setEmailError('Email addresses do not match.')
-            setEmailState('error')
-            return
+            setEmailError('Email addresses do not match.');
+            setEmailState('error');
+            return;
         }
-        setEmailState('saving')
-        setEmailError(null)
+        setEmailState('saving');
+        setEmailError(null);
         const result = await updateUser(user.id, token, {
             email: emailForm.newEmail,
-        })
+        });
         if ('error' in result) {
-            setEmailError(result.error)
-            setEmailState('error')
+            setEmailError(result.error);
+            setEmailState('error');
         } else {
-            setEmailState('success')
+            setEmailState('success');
             setEmailForm({
                 newEmail: '',
                 confirmEmail: '',
                 currentPassword: '',
-            })
-            setTimeout(() => setEmailState('idle'), 3000)
+            });
+            setTimeout(() => setEmailState('idle'), 3000);
         }
-    }
+    };
 
     const handleChangePassword = async () => {
-        if (!token) return
+        if (!token) return;
         if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-            setPasswordError('New passwords do not match.')
-            setPasswordState('error')
-            return
+            setPasswordError('New passwords do not match.');
+            setPasswordState('error');
+            return;
         }
         if (passwordForm.newPassword.length < 6) {
-            setPasswordError('New password must be at least 6 characters.')
-            setPasswordState('error')
-            return
+            setPasswordError('New password must be at least 6 characters.');
+            setPasswordState('error');
+            return;
         }
-        setPasswordState('saving')
-        setPasswordError(null)
+        setPasswordState('saving');
+        setPasswordError(null);
         const result = await changePassword(token, {
             currentPassword: passwordForm.currentPassword,
             newPassword: passwordForm.newPassword,
-        })
+        });
         if ('error' in result) {
-            setPasswordError(result.error)
-            setPasswordState('error')
+            setPasswordError(result.error);
+            setPasswordState('error');
         } else {
-            setPasswordState('success')
+            setPasswordState('success');
             setPasswordForm({
                 currentPassword: '',
                 newPassword: '',
                 confirmPassword: '',
-            })
-            setTimeout(() => setPasswordState('idle'), 3000)
+            });
+            setTimeout(() => setPasswordState('idle'), 3000);
         }
-    }
+    };
 
     const initials = user
         ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-        : '?'
+        : '?';
 
     const navItems: { id: Section; label: string; sub: string }[] = [
         { id: 'profile', label: 'Profile', sub: 'Name, username, bio' },
         { id: 'email', label: 'Email', sub: user?.email ?? '' },
         { id: 'password', label: 'Password', sub: 'Change your password' },
-    ]
+    ];
 
     return (
         <div className="sp">
@@ -506,7 +506,7 @@ const SettingsPage = () => {
                 </main>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SettingsPage
+export default SettingsPage;

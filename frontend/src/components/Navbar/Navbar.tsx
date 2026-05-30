@@ -1,16 +1,16 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider'
+import { useAuth } from '../../providers/AuthProvider';
 
-import './Navbar.css'
+import './Navbar.css';
 
 const Navbar = () => {
-    const { user, logout, isAuthenticated } = useAuth()
-    const navigate = useNavigate()
+    const { user, logout, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await logout()
-    }
+        await logout();
+    };
 
     return (
         <nav className="navbar">
@@ -110,7 +110,7 @@ const Navbar = () => {
                 )}
             </div>
         </nav>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

@@ -1,159 +1,159 @@
-import { useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider'
-import * as Flashly from '../../services/flashly'
-import type { Deck, Card, UpdateDeckRequest } from '../../services/flashly'
+import { useAuth } from '../../providers/AuthProvider';
+import * as Flashly from '../../services/flashly';
+import type { Deck, Card, UpdateDeckRequest } from '../../services/flashly';
 
-import './DeckManagerPage.css'
+import './DeckManagerPage.css';
 
-type CardModalMode = 'add' | 'edit'
+type CardModalMode = 'add' | 'edit';
 
 type CardForm = {
-    frontText: string
-    backText: string
-    difficulty: 'easy' | 'medium' | 'hard'
-}
+    frontText: string;
+    backText: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+};
 
-const DIFFICULTIES = ['easy', 'medium', 'hard'] as const
+const DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 
 const DeckManagerPage = () => {
-    const { deckId } = useParams<{ deckId: string }>()
-    const { token } = useAuth()
-    const navigate = useNavigate()
+    const { deckId } = useParams<{ deckId: string }>();
+    const { token } = useAuth();
+    const navigate = useNavigate();
 
     // Deck
-    const [deck, setDeck] = useState<Deck | null>(null)
-    const [deckLoading, setDeckLoading] = useState(true)
-    const [deckError, setDeckError] = useState<string | null>(null)
+    const [deck, setDeck] = useState<Deck | null>(null);
+    const [deckLoading, setDeckLoading] = useState(true);
+    const [deckError, setDeckError] = useState<string | null>(null);
 
-    const [deckEditing, setDeckEditing] = useState(false)
-    const [deckForm, setDeckForm] = useState<UpdateDeckRequest>({})
-    const [deckSaving, setDeckSaving] = useState(false)
-    const [deckSaveError, setDeckSaveError] = useState<string | null>(null)
+    const [deckEditing, setDeckEditing] = useState(false);
+    const [deckForm, setDeckForm] = useState<UpdateDeckRequest>({});
+    const [deckSaving, setDeckSaving] = useState(false);
+    const [deckSaveError, setDeckSaveError] = useState<string | null>(null);
 
-    const [confirmDelete, setConfirmDelete] = useState(false)
-    const [deleting, setDeleting] = useState(false)
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     // Cards
-    const [cards, setCards] = useState<Card[]>([])
-    const [cardsLoading, setCardsLoading] = useState(true)
-    const [cardsError, setCardsError] = useState<string | null>(null)
+    const [cards, setCards] = useState<Card[]>([]);
+    const [cardsLoading, setCardsLoading] = useState(true);
+    const [cardsError, setCardsError] = useState<string | null>(null);
 
     // Card modal
-    const [cardModal, setCardModal] = useState(false)
-    const [cardModalMode, setCardModalMode] = useState<CardModalMode>('add')
-    const [editingCardId, setEditingCardId] = useState<string | null>(null)
+    const [cardModal, setCardModal] = useState(false);
+    const [cardModalMode, setCardModalMode] = useState<CardModalMode>('add');
+    const [editingCardId, setEditingCardId] = useState<string | null>(null);
     const [cardForm, setCardForm] = useState<CardForm>({
         frontText: '',
         backText: '',
         difficulty: 'easy',
-    })
-    const [cardSaving, setCardSaving] = useState(false)
-    const [cardFormError, setCardFormError] = useState<string | null>(null)
-    const [deletingCardId, setDeletingCardId] = useState<string | null>(null)
+    });
+    const [cardSaving, setCardSaving] = useState(false);
+    const [cardFormError, setCardFormError] = useState<string | null>(null);
+    const [deletingCardId, setDeletingCardId] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!deckId) return
+        if (!deckId) return;
 
         Flashly.getDeck(deckId).then((result) => {
             if ('error' in result) {
-                setDeckError(result.error)
+                setDeckError(result.error);
             } else {
-                setDeck(result.deck)
+                setDeck(result.deck);
                 setDeckForm({
                     name: result.deck.name,
                     description: result.deck.description,
                     publishStatus: result.deck.publishStatus,
-                })
+                });
             }
-            setDeckLoading(false)
-        })
-    }, [deckId])
+            setDeckLoading(false);
+        });
+    }, [deckId]);
 
     useEffect(() => {
-        if (!deckId || !token) return
+        if (!deckId || !token) return;
 
         Flashly.getCards(deckId, token).then((result) => {
             if ('error' in result) {
-                setCardsError(result.error)
+                setCardsError(result.error);
             } else {
-                setCards(result.cards ?? [])
+                setCards(result.cards ?? []);
             }
-            setCardsLoading(false)
-        })
-    }, [deckId, token])
+            setCardsLoading(false);
+        });
+    }, [deckId, token]);
 
     // Deck actions
     const handleSaveDeck = async () => {
-        if (!deckId || !token) return
-        setDeckSaving(true)
-        setDeckSaveError(null)
-        const result = await Flashly.updateDeck(deckId, token, deckForm)
+        if (!deckId || !token) return;
+        setDeckSaving(true);
+        setDeckSaveError(null);
+        const result = await Flashly.updateDeck(deckId, token, deckForm);
         if ('error' in result) {
-            setDeckSaveError(result.error)
+            setDeckSaveError(result.error);
         } else {
-            setDeck(result.deck)
-            setDeckEditing(false)
+            setDeck(result.deck);
+            setDeckEditing(false);
         }
-        setDeckSaving(false)
-    }
+        setDeckSaving(false);
+    };
 
     const handleDeleteDeck = async () => {
-        if (!deckId || !token) return
-        setDeleting(true)
-        const result = await Flashly.deleteDeck(deckId, token)
+        if (!deckId || !token) return;
+        setDeleting(true);
+        const result = await Flashly.deleteDeck(deckId, token);
         if ('error' in result) {
-            setDeleting(false)
+            setDeleting(false);
         } else {
-            navigate('/decks')
+            navigate('/decks');
         }
-    }
+    };
 
     //  Card modal helpers
     const openAddCard = () => {
-        setCardForm({ frontText: '', backText: '', difficulty: 'easy' })
-        setCardFormError(null)
-        setCardModalMode('add')
-        setEditingCardId(null)
-        setCardModal(true)
-    }
+        setCardForm({ frontText: '', backText: '', difficulty: 'easy' });
+        setCardFormError(null);
+        setCardModalMode('add');
+        setEditingCardId(null);
+        setCardModal(true);
+    };
 
     const openEditCard = (card: Card) => {
         setCardForm({
             frontText: card.frontText,
             backText: card.backText,
             difficulty: card.difficulty,
-        })
-        setCardFormError(null)
-        setCardModalMode('edit')
-        setEditingCardId(card.id)
-        setCardModal(true)
-    }
+        });
+        setCardFormError(null);
+        setCardModalMode('edit');
+        setEditingCardId(card.id);
+        setCardModal(true);
+    };
 
     const closeCardModal = () => {
-        setCardModal(false)
-        setEditingCardId(null)
-        setCardFormError(null)
-    }
+        setCardModal(false);
+        setEditingCardId(null);
+        setCardFormError(null);
+    };
 
     //  Card actions
     const handleSaveCard = async () => {
-        if (!deckId || !token) return
+        if (!deckId || !token) return;
         if (!cardForm.frontText.trim() || !cardForm.backText.trim()) {
-            setCardFormError('Both front and back are required.')
-            return
+            setCardFormError('Both front and back are required.');
+            return;
         }
-        setCardSaving(true)
-        setCardFormError(null)
+        setCardSaving(true);
+        setCardFormError(null);
 
         if (cardModalMode === 'add') {
-            const result = await Flashly.createCard(deckId, token, cardForm)
+            const result = await Flashly.createCard(deckId, token, cardForm);
             if ('error' in result) {
-                setCardFormError(result.error)
+                setCardFormError(result.error);
             } else {
-                setCards((prev) => [...prev, result.card])
-                closeCardModal()
+                setCards((prev) => [...prev, result.card]);
+                closeCardModal();
             }
         } else if (editingCardId) {
             const result = await Flashly.updateCard(
@@ -161,38 +161,38 @@ const DeckManagerPage = () => {
                 editingCardId,
                 token,
                 cardForm,
-            )
+            );
             if ('error' in result) {
-                setCardFormError(result.error)
+                setCardFormError(result.error);
             } else {
                 setCards((prev) =>
                     prev.map((c) =>
                         c.id === result.card.id ? result.card : c,
                     ),
-                )
-                closeCardModal()
+                );
+                closeCardModal();
             }
         }
-        setCardSaving(false)
-    }
+        setCardSaving(false);
+    };
 
     const handleDeleteCard = async (cardId: string) => {
-        if (!deckId || !token) return
-        setDeletingCardId(cardId)
+        if (!deckId || !token) return;
+        setDeletingCardId(cardId);
 
-        const result = await Flashly.deleteCard(deckId, cardId, token)
+        const result = await Flashly.deleteCard(deckId, cardId, token);
         if (!('error' in result)) {
-            setCards((prev) => prev.filter((c) => c.id !== cardId))
+            setCards((prev) => prev.filter((c) => c.id !== cardId));
         }
-        setDeletingCardId(null)
-    }
+        setDeletingCardId(null);
+    };
 
     if (deckLoading) {
         return (
             <div className="dm__loading">
                 <div className="dm__spinner" />
             </div>
-        )
+        );
     }
 
     if (deckError || !deck) {
@@ -205,7 +205,7 @@ const DeckManagerPage = () => {
                     ← Back to decks
                 </Link>
             </div>
-        )
+        );
     }
 
     return (
@@ -585,7 +585,7 @@ const DeckManagerPage = () => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default DeckManagerPage
+export default DeckManagerPage;

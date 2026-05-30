@@ -1,73 +1,73 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import * as Flashly from '../../services/flashly'
-import type { Deck, CreateDeckRequest } from '../../services/flashly'
-import { useAuth } from '..//../providers/AuthProvider'
-import DeckCard from '../DeckCard'
+import * as Flashly from '../../services/flashly';
+import type { Deck, CreateDeckRequest } from '../../services/flashly';
+import { useAuth } from '..//../providers/AuthProvider';
+import DeckCard from '../DeckCard';
 
-import './DecksPage.css'
+import './DecksPage.css';
 
 const DecksPage = () => {
-    const { token } = useAuth()
-    const navigate = useNavigate()
+    const { token } = useAuth();
+    const navigate = useNavigate();
 
-    const [decks, setDecks] = useState<Deck[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-    const [showModal, setShowModal] = useState(false)
+    const [decks, setDecks] = useState<Deck[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState<CreateDeckRequest>({
         name: '',
         description: '',
         publishStatus: 'private',
-    })
-    const [formError, setFormError] = useState<string | null>(null)
-    const [creating, setCreating] = useState(false)
+    });
+    const [formError, setFormError] = useState<string | null>(null);
+    const [creating, setCreating] = useState(false);
 
     useEffect(() => {
         const load = async () => {
-            if (!token) return
-            setLoading(true)
+            if (!token) return;
+            setLoading(true);
 
-            const result = await Flashly.getDecks(token)
+            const result = await Flashly.getDecks(token);
             if ('error' in result) {
-                setError(result.error)
+                setError(result.error);
             } else {
-                setDecks(result.decks)
+                setDecks(result.decks);
             }
 
-            setLoading(false)
-        }
+            setLoading(false);
+        };
 
-        load()
-    }, [token])
+        load();
+    }, [token]);
 
     const openModal = () => {
-        setForm({ name: '', description: '', publishStatus: 'private' })
-        setFormError(null)
-        setShowModal(true)
-    }
+        setForm({ name: '', description: '', publishStatus: 'private' });
+        setFormError(null);
+        setShowModal(true);
+    };
 
-    const closeModal = () => setShowModal(false)
+    const closeModal = () => setShowModal(false);
 
     const handleCreate = async () => {
-        if (!token) return
+        if (!token) return;
 
         if (!form.name.trim()) {
-            setFormError('Deck name is required.')
-            return
+            setFormError('Deck name is required.');
+            return;
         }
-        setCreating(true)
-        setFormError(null)
-        const result = await Flashly.createDeck(token, form)
-        setCreating(false)
+        setCreating(true);
+        setFormError(null);
+        const result = await Flashly.createDeck(token, form);
+        setCreating(false);
         if ('error' in result) {
-            setFormError(result.error)
+            setFormError(result.error);
         } else {
-            closeModal()
-            navigate(`/decks/${result.deck.id}/manage`)
+            closeModal();
+            navigate(`/decks/${result.deck.id}/manage`);
         }
-    }
+    };
 
     return (
         <div className="decks">
@@ -256,7 +256,7 @@ const DecksPage = () => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default DecksPage
+export default DecksPage;

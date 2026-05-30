@@ -1,22 +1,22 @@
-import { useRouteError, isRouteErrorResponse, Link } from 'react-router-dom'
+import { useRouteError, isRouteErrorResponse, Link } from 'react-router-dom';
 
-import './ErrorPage.css'
+import './ErrorPage.css';
 
 const ErrorPage = () => {
-    const error = useRouteError()
+    const error = useRouteError();
 
-    let status = 404
-    let message = "We couldn't find the page you were looking for."
+    let status = 404;
+    let message = "We couldn't find the page you were looking for.";
 
     if (isRouteErrorResponse(error)) {
-        status = error.status
-        message = error.statusText || message
+        status = error.status;
+        message = error.statusText || message;
     } else if (error instanceof Error) {
-        status = 500
-        message = 'Something went wrong on our end.'
+        status = 500;
+        message = 'Something went wrong on our end.';
     }
 
-    const is404 = status === 404
+    const is404 = status === 404;
 
     return (
         <div className="error-page">
@@ -49,7 +49,7 @@ const ErrorPage = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ErrorPage
+export default ErrorPage;

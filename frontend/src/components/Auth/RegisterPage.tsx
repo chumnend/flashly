@@ -1,20 +1,20 @@
-import { useState, type ChangeEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, type ChangeEvent } from 'react';
+import { Link } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider'
+import { useAuth } from '../../providers/AuthProvider';
 
-import './AuthPage.css'
+import './AuthPage.css';
 
 interface FormData {
-    firstName: string
-    lastName: string
-    username: string
-    email: string
-    password: string
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    password: string;
 }
 
 const RegisterPage = () => {
-    const { register } = useAuth()
+    const { register } = useAuth();
 
     const [form, setForm] = useState<FormData>({
         firstName: '',
@@ -22,25 +22,25 @@ const RegisterPage = () => {
         username: '',
         email: '',
         password: '',
-    })
-    const [error, setError] = useState<string | null>(null)
-    const [loading, setLoading] = useState(false)
+    });
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-        setError(null)
-    }
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setError(null);
+    };
 
     const handleSubmit = async (e: ChangeEvent) => {
-        e.preventDefault()
-        setLoading(true)
-        setError(null)
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
 
-        const result = await register(form)
-        if (result) setError(result.error)
+        const result = await register(form);
+        if (result) setError(result.error);
 
-        setLoading(false)
-    }
+        setLoading(false);
+    };
 
     return (
         <div className="auth">
@@ -159,7 +159,7 @@ const RegisterPage = () => {
                 </p>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default RegisterPage
+export default RegisterPage;

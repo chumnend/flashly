@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import type { Deck } from '../../services/flashly'
-import './DeckCard.css'
+import type { Deck } from '../../services/flashly';
+import './DeckCard.css';
 
 interface DeckCardProps {
-    deck: Deck
+    deck: Deck;
 }
 
 const DeckCard = ({ deck }: DeckCardProps) => {
-    const stars = Math.round(deck.rating)
+    const stars = Math.round(deck.rating);
 
     return (
         <Link to={`/decks/${deck.id}`} className="deck-card">
@@ -39,7 +39,7 @@ const DeckCard = ({ deck }: DeckCardProps) => {
                 )}
             </div>
         </Link>
-    )
-}
+    );
+};
 
-export default DeckCard
+export default DeckCard;
