@@ -1,0 +1,428 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap');
+
+/* ── Base ─────────────────────────────────────────────── */
+
+.sp {
+    min-height: calc(100vh - 64px);
+    background: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    color: #f0f0f0;
+}
+
+/* ── Layout ───────────────────────────────────────────── */
+
+.sp__layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    max-width: 960px;
+    margin: 0 auto;
+    min-height: calc(100vh - 64px);
+    gap: 0;
+}
+
+/* ── Sidebar ──────────────────────────────────────────── */
+
+.sp__sidebar {
+    border-right: 1px solid #141414;
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    animation: fadeUp 0.4s ease both;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+}
+
+.sp__sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #161616;
+}
+
+.sp__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #c8ff5e;
+    color: #0a0a0a;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: -0.5px;
+}
+
+.sp__sidebar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.sp__sidebar-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #f0f0f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sp__sidebar-handle {
+    font-size: 0.78rem;
+    color: #444;
+}
+
+/* ── Nav ──────────────────────────────────────────────── */
+
+.sp__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.sp__nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.sp__nav-item:hover {
+    background: #141414;
+}
+
+.sp__nav-item--active {
+    background: #141414;
+}
+
+.sp__nav-item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.sp__nav-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #888;
+    transition: color 0.15s;
+}
+
+.sp__nav-item--active .sp__nav-label,
+.sp__nav-item:hover .sp__nav-label {
+    color: #f0f0f0;
+}
+
+.sp__nav-sub {
+    font-size: 0.72rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.sp__nav-item--active .sp__nav-sub {
+    color: #555;
+}
+
+.sp__nav-chevron {
+    font-size: 1rem;
+    color: #2a2a2a;
+    transition: color 0.15s;
+}
+
+.sp__nav-item--active .sp__nav-chevron,
+.sp__nav-item:hover .sp__nav-chevron {
+    color: #c8ff5e;
+}
+
+/* ── Sign out ─────────────────────────────────────────── */
+
+.sp__signout {
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: #444;
+    cursor: pointer;
+    text-align: left;
+    transition:
+        color 0.2s,
+        border-color 0.2s;
+    width: 100%;
+}
+
+.sp__signout:hover {
+    color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.25);
+}
+
+/* ── Main ─────────────────────────────────────────────── */
+
+.sp__main {
+    padding: 2.5rem 3rem;
+}
+
+.sp__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: fadeUp 0.4s ease both;
+    max-width: 520px;
+}
+
+/* ── Section head ─────────────────────────────────────── */
+
+.sp__section-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.sp__title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.75px;
+    color: #f0f0f0;
+    margin: 0;
+}
+
+.sp__subtitle {
+    font-size: 0.875rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.sp__subtitle strong {
+    color: #888;
+    font-weight: 500;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+
+.sp__card {
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: 14px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* ── Form elements ────────────────────────────────────── */
+
+.sp__form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.sp__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.sp__label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #555;
+    letter-spacing: 0.03em;
+}
+
+.sp__input {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #f0f0f0;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.sp__input::placeholder {
+    color: #333;
+}
+
+.sp__input:focus {
+    border-color: #c8ff5e;
+    box-shadow: 0 0 0 3px rgba(200, 255, 94, 0.07);
+}
+
+.sp__input--mismatch {
+    border-color: rgba(255, 107, 107, 0.5) !important;
+}
+
+.sp__input--mismatch:focus {
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.08) !important;
+}
+
+.sp__prefix-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sp__prefix {
+    position: absolute;
+    left: 0.9rem;
+    font-size: 0.9rem;
+    color: #444;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.sp__input--prefixed {
+    padding-left: 1.75rem;
+}
+
+.sp__textarea {
+    resize: vertical;
+    line-height: 1.55;
+    min-height: 88px;
+}
+
+/* ── Divider / rule ───────────────────────────────────── */
+
+.sp__rule {
+    height: 1px;
+    background: #181818;
+    margin: 0.25rem 0;
+}
+
+/* ── Password strength ────────────────────────────────── */
+
+.sp__strength {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+}
+
+.sp__strength-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 999px;
+    background: #222;
+    transition: background 0.3s;
+}
+
+.sp__strength-bar--ok {
+    background: #fbbf24;
+}
+.sp__strength-bar--strong {
+    background: #c8ff5e;
+}
+
+.sp__strength-label {
+    font-size: 0.72rem;
+    color: #444;
+    white-space: nowrap;
+    min-width: 52px;
+    text-align: right;
+}
+
+/* ── Inline field error ───────────────────────────────── */
+
+.sp__field-error {
+    font-size: 0.75rem;
+    color: #f87171;
+}
+
+/* ── Card footer ──────────────────────────────────────── */
+
+.sp__card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid #161616;
+    margin-top: 0.25rem;
+}
+
+/* ── Feedback ─────────────────────────────────────────── */
+
+.sp__error {
+    font-size: 0.83rem;
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.07);
+    border: 1px solid rgba(255, 107, 107, 0.18);
+    border-radius: 6px;
+    padding: 0.55rem 0.85rem;
+    margin: 0;
+}
+
+.sp__success {
+    font-size: 0.83rem;
+    color: #c8ff5e;
+    font-weight: 500;
+}
+
+/* ── Save button ──────────────────────────────────────── */
+
+.sp__save-btn {
+    padding: 0.6rem 1.4rem;
+    background: #c8ff5e;
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.15s;
+    white-space: nowrap;
+}
+
+.sp__save-btn:hover:not(:disabled) {
+    background: #d6ff7a;
+    transform: translateY(-1px);
+}
+
+.sp__save-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ── Animations ───────────────────────────────────────── */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
