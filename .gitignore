@@ -38,5 +38,6 @@ venv
 .DS_Store
 Thumbs.db
 
-# Claude
+# LLM / AI
 .claude
+litellm_config.yaml
