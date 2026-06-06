@@ -187,6 +187,15 @@ def update_user(request: Request):
         request.response.status_code = 400
         return {"error": "Invalid JSON"}
 
+@view_config(route_name="change_password", request_method="PUT", renderer="json")
+def change_password(request: Request):
+    # Get JSON request
+    try:
+        data = request.json_body
+    except (ValueError, UnicodeDecodeError):
+        request.response.status_code = 400
+        return {"error": "Invalid JSON"}
+
     # Get token from request
     token = request.params.get("token")
     if not token:

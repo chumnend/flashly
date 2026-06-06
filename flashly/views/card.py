@@ -291,6 +291,7 @@ def update_card(request: Request):
         return {"error": "Failed to update card"}
 
 
+@view_config(route_name="delete_card", request_method="DELETE", renderer="json")
 def delete_card(request: Request):
     deck_id = request.matchdict["deck_id"]
     card_id = request.matchdict["card_id"]

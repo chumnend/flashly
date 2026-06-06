@@ -369,6 +369,9 @@ export const createCard = async (
     token: string,
     data: CreateCardRequest,
 ): Promise<CardResponse | ApiError> => {
+    if (!data.frontText.trim() || !data.backText.trim()) {
+        return { error: 'Front text and back text cannot be empty' };
+    }
     const response = await fetch(
         `${BASE_URL}/decks/${deckId}/cards?token=${token}`,
         {
@@ -398,6 +401,9 @@ export const updateCard = async (
     token: string,
     data: UpdateCardRequest,
 ): Promise<CardResponse | ApiError> => {
+    if (!data.frontText?.trim() || !data.backText?.trim()) {
+        return { error: 'Front text and back text cannot be empty' };
+    }
     const response = await fetch(
         `${BASE_URL}/decks/${deckId}/cards/${cardId}?token=${token}`,
         {

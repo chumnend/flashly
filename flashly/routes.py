@@ -34,4 +34,3 @@ def includeme(config):
 
     # Catch-all route for React SPA (must be last)
     config.add_route("frontend", "/*path")
-

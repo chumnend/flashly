@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import { useAuth } from '../../providers/AuthProvider';
@@ -131,19 +131,21 @@ const DeckManagerPage = () => {
         setCardModal(true);
     };
 
-    const closeCardModal = () => {
+    const closeCardModal = useCallback(() => {
         setCardModal(false);
         setEditingCardId(null);
         setCardFormError(null);
-    };
+    }, []);
 
     //  Card actions
-    const handleSaveCard = async () => {
+    const handleSaveCard = useCallback(async () => {
         if (!deckId || !token) return;
+
         if (!cardForm.frontText.trim() || !cardForm.backText.trim()) {
             setCardFormError('Both front and back are required.');
             return;
         }
+
         setCardSaving(true);
         setCardFormError(null);
 
@@ -152,7 +154,11 @@ const DeckManagerPage = () => {
             if ('error' in result) {
                 setCardFormError(result.error);
             } else {
-                setCards((prev) => [...prev, result.card]);
+                Flashly.getCards(deckId, token).then((cardsResult) => {
+                    if (!('error' in cardsResult)) {
+                        setCards(cardsResult.cards ?? []);
+                    }
+                });
                 closeCardModal();
             }
         } else if (editingCardId) {
@@ -165,25 +171,45 @@ const DeckManagerPage = () => {
             if ('error' in result) {
                 setCardFormError(result.error);
             } else {
-                setCards((prev) =>
-                    prev.map((c) =>
-                        c.id === result.card.id ? result.card : c,
-                    ),
-                );
+                Flashly.getCards(deckId, token).then((cardsResult) => {
+                    if (!('error' in cardsResult)) {
+                        setCards(cardsResult.cards ?? []);
+                    }
+                });
                 closeCardModal();
             }
         }
         setCardSaving(false);
+    }, [
+        deckId,
+        token,
+        cardModalMode,
+        editingCardId,
+        cardForm,
+        closeCardModal,
+        setCards,
+        setCardFormError,
+        setCardSaving,
+    ]);
+
+    const confirmCardDelete = (cardId: string) => {
+        setDeletingCardId(cardId);
     };
 
-    const handleDeleteCard = async (cardId: string) => {
-        if (!deckId || !token) return;
-        setDeletingCardId(cardId);
+    const handleDeleteCardConfirmed = async () => {
+        if (!deckId || !token || !deletingCardId) return;
+        const cardIdToDelete = deletingCardId;
+        setDeletingCardId('in_progress'); // Indicate deletion is in progress
 
-        const result = await Flashly.deleteCard(deckId, cardId, token);
+        console.log(`DEBUG (Frontend): Deleting card - deckId: ${deckId}, cardId: ${cardIdToDelete}, token: ${token}`);
+        const result = await Flashly.deleteCard(deckId, cardIdToDelete, token);
         if (!('error' in result)) {
-            setCards((prev) => prev.filter((c) => c.id !== cardId));
+            setCards((prev) => prev.filter((c) => c.id !== cardIdToDelete));
         }
+        setDeletingCardId(null);
+    };
+
+    const cancelCardDelete = () => {
         setDeletingCardId(null);
     };
 
@@ -386,7 +412,8 @@ const DeckManagerPage = () => {
                                                 Front
                                             </span>
                                             <p className="dm__side-text">
-                                                {card.frontText}
+                                                {card.frontText ||
+                                                    '[Empty Front Text]'}
                                             </p>
                                         </div>
                                         <div className="dm__card-divider" />
@@ -395,7 +422,8 @@ const DeckManagerPage = () => {
                                                 Back
                                             </span>
                                             <p className="dm__side-text">
-                                                {card.backText}
+                                                {card.backText ||
+                                                    '[Empty Back Text]'}
                                             </p>
                                         </div>
                                     </div>
@@ -417,7 +445,7 @@ const DeckManagerPage = () => {
                                             <button
                                                 className="dm__card-btn dm__card-btn--danger"
                                                 onClick={() =>
-                                                    handleDeleteCard(card.id)
+                                                    confirmCardDelete(card.id)
                                                 }
                                                 disabled={
                                                     deletingCardId === card.id
@@ -579,6 +607,58 @@ const DeckManagerPage = () => {
                                 disabled={deleting}
                             >
                                 {deleting ? 'Deleting…' : 'Yes, delete'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/*  Delete card confirm  */}
+            {deletingCardId && deletingCardId !== 'in_progress' && (
+                <div className="dm__overlay" onClick={cancelCardDelete}>
+                    <div
+                        className="dm__modal dm__modal--sm"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="dm__modal-header">
+                            <h2 className="dm__modal-title">Delete card?</h2>
+                            <button
+                                className="dm__modal-close"
+                                onClick={cancelCardDelete}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="dm__modal-body">
+                            <p className="dm__modal-warn">
+                                You are about to permanently delete this card:
+                                <strong>
+                                    "
+                                    {
+                                        cards.find(
+                                            (c) => c.id === deletingCardId,
+                                        )?.frontText
+                                    }
+                                    "
+                                </strong>
+                                . This cannot be undone.
+                            </p>
+                        </div>
+                        <div className="dm__modal-footer">
+                            <button
+                                className="dm__ghost-btn"
+                                onClick={cancelCardDelete}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="dm__danger-btn"
+                                onClick={handleDeleteCardConfirmed}
+                                disabled={deletingCardId === 'in_progress'}
+                            >
+                                {deletingCardId === 'in_progress'
+                                    ? 'Deleting…'
+                                    : 'Yes, delete'}
                             </button>
                         </div>
                     </div>
