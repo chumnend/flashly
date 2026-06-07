@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '../../hooks/useAuth';
 
 import './AuthPage.css';
 

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 
 import { getDeck, getCards } from '../../services/flashly';
 import type { Deck, Card } from '../../services/flashly';
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '../../hooks/useAuth';
 import './DeckPage.css';
 
 type StudyState = 'idle' | 'studying' | 'complete';

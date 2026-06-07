@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '../../hooks/useAuth';
 
 import './HomePage.css';
 

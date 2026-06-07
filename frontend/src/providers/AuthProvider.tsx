@@ -1,41 +1,13 @@
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    type ReactNode,
-} from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as Flashly from '../services/flashly';
 import type { User, RegisterRequest, ApiError } from '../services/flashly';
 
-// Types
+import { AuthContext } from '../context/AuthContext';
 
-interface AuthContextType {
-    user: User | null;
-    token: string | null;
-    register: (data: RegisterRequest) => Promise<ApiError | null>;
-    login: (email: string, password: string) => Promise<ApiError | null>;
-    logout: () => Promise<void>;
-    isAuthenticated: boolean;
-}
-
-// Context
-
-const AuthContext = createContext<AuthContextType | null>(null);
-
-const TOKEN_KEY = 'token';
-const USER_KEY = 'user';
-
-// Hook
-
-export const useAuth = (): AuthContextType => {
-    const context = useContext(AuthContext);
-    if (!context)
-        throw new Error('useAuth must be used within an AuthProvider');
-    return context;
-};
+export const TOKEN_KEY = 'token';
+export const USER_KEY = 'user';
 
 // Provider
 
@@ -103,6 +75,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         logout,
         isAuthenticated: !!token && !!user,
+        updateUserInContext: (newUser: User) => {
+            setUser(newUser);
+        },
     };
 
     return (

@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 import { updateUser, changePassword } from '../../services/flashly';
 import type { UpdateUserRequest } from '../../services/flashly';
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '../../hooks/useAuth';
 import './SettingsPage.css';
 
 type Section = 'profile' | 'email' | 'password';
 type SaveState = 'idle' | 'saving' | 'success' | 'error';
 
 const SettingsPage = () => {
-    const { user, token, logout } = useAuth();
+    const { user, token, logout, updateUserInContext } = useAuth();
 
     const [activeSection, setActiveSection] = useState<Section>('profile');
 
@@ -51,6 +51,7 @@ const SettingsPage = () => {
             setProfileError(result.error);
             setProfileState('error');
         } else {
+            updateUserInContext(result.user);
             setProfileState('success');
             setTimeout(() => setProfileState('idle'), 3000);
         }
@@ -77,6 +78,7 @@ const SettingsPage = () => {
             setEmailError(result.error);
             setEmailState('error');
         } else {
+            updateUserInContext(result.user);
             setEmailState('success');
             setEmailForm({
                 newEmail: '',

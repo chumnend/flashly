@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import * as Flashly from '../../services/flashly';
 import type { Deck, CreateDeckRequest } from '../../services/flashly';
-import { useAuth } from '..//../providers/AuthProvider';
+import { useAuth } from '../../hooks/useAuth';
 import DeckCard from '../DeckCard';
 
 import './DecksPage.css';

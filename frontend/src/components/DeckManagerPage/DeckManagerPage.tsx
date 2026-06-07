@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '../../hooks/useAuth';
 import * as Flashly from '../../services/flashly';
 import type { Deck, Card, UpdateDeckRequest } from '../../services/flashly';
 
@@ -201,7 +201,9 @@ const DeckManagerPage = () => {
         const cardIdToDelete = deletingCardId;
         setDeletingCardId('in_progress'); // Indicate deletion is in progress
 
-        console.log(`DEBUG (Frontend): Deleting card - deckId: ${deckId}, cardId: ${cardIdToDelete}, token: ${token}`);
+        console.log(
+            `DEBUG (Frontend): Deleting card - deckId: ${deckId}, cardId: ${cardIdToDelete}, token: ${token}`,
+        );
         const result = await Flashly.deleteCard(deckId, cardIdToDelete, token);
         if (!('error' in result)) {
             setCards((prev) => prev.filter((c) => c.id !== cardIdToDelete));
