@@ -8,7 +8,7 @@ and building a social media like project.
 
 ### Demo
 
-TBD
+![animated](docs/demo.gif)
 
 ## Getting Started
 
