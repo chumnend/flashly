@@ -99,35 +99,16 @@ def update_user(request: Request):
     db_conn = request.db_conn
 
     # Find the existing user
-    user = UserModel.find_by_email(db_conn, data.get("email", "")) if data.get("email") else None
+    user = UserModel.find_by_id(db_conn, user_id)
     if not user:
-        # Try to find by current user_id for validation
-        with db_conn.cursor() as cur:
-            cur.execute(
-                "SELECT id, first_name, last_name, username, email, password_hash, created_at, updated_at FROM users WHERE id = %s",
-                (user_id,),
-            )
-            record = cur.fetchone()
-            if not record:
-                request.response.status_code = 404
-                return {"error": "User not found"}
-
-            user = UserModel(
-                id=uuid.UUID(record[0]),
-                first_name=record[1],
-                last_name=record[2],
-                username=record[3],
-                email=record[4],
-                password_hash=record[5],
-                created_at=record[6],
-                updated_at=record[7],
-            )
+        request.response.status_code = 404
+        return {"error": "User not found"}
 
     # Extract and validate data (allow partial updates)
-    first_name = data.get("firstName", user.first_name).strip().title() if data.get("firstName") else user.first_name
-    last_name = data.get("lastName", user.last_name).strip().title() if data.get("lastName") else user.last_name
-    username = data.get("username", user.username).strip() if data.get("username") else user.username
-    email = data.get("email", user.email).strip().lower() if data.get("email") else user.email
+    first_name = data.get("firstName", user.first_name).strip().title() if "firstName" in data else user.first_name
+    last_name = data.get("lastName", user.last_name).strip().title() if "lastName" in data else user.last_name
+    username = data.get("username", user.username).strip() if "username" in data else user.username
+    email = data.get("email", user.email).strip().lower() if "email" in data else user.email
     about_me = data.get("aboutMe", "").strip() if "aboutMe" in data else None
 
     # Validate email format if provided
@@ -189,6 +170,8 @@ def update_user(request: Request):
 
 @view_config(route_name="change_password", request_method="PUT", renderer="json")
 def change_password(request: Request):
+    user_id_from_route = request.matchdict["user_id"]
+
     # Get JSON request
     try:
         data = request.json_body
@@ -198,9 +181,9 @@ def change_password(request: Request):
 
     # Get token from request
     token = request.params.get("token")
-    if not token:
-        request.response.status_code = 400
-        return {"error": "Token is required"}
+    if not token or token != user_id_from_route:
+        request.response.status_code = 403
+        return {"error": "You can only change your own password"}
 
     # Validate required fields
     required_fields = ["currentPassword", "newPassword"]
@@ -213,40 +196,32 @@ def change_password(request: Request):
     new_password = data["newPassword"]
 
     # Validate new password
-    if len(new_password) < 6:
+    if len(new_password) < 8:
         request.response.status_code = 400
-        return {"error": "New password must be at least 6 characters long"}
+        return {"error": "Password must be at least 8 characters long."}
+    if not any(c.isdigit() for c in new_password):
+        request.response.status_code = 400
+        return {"error": "Password must contain at least one digit."}
+    if not any(c.isupper() for c in new_password):
+        request.response.status_code = 400
+        return {"error": "Password must contain at least one uppercase letter."}
+    if not any(c.islower() for c in new_password):
+        request.response.status_code = 400
+        return {"error": "Password must contain at least one lowercase letter."}
 
     # Fetch database connector
     db_conn = request.db_conn
 
     # Find user by ID
-    with db_conn.cursor() as cur:
-        cur.execute(
-            "SELECT id, first_name, last_name, username, email, password_hash, created_at, updated_at FROM users WHERE id = %s",
-            (token,),
-        )
-        record = cur.fetchone()
-
-        if not record:
-            request.response.status_code = 404
-            return {"error": "User not found"}
-
-        user = UserModel(
-            id=uuid.UUID(record[0]),
-            first_name=record[1],
-            last_name=record[2],
-            username=record[3],
-            email=record[4],
-            password_hash=record[5],
-            created_at=record[6],
-            updated_at=record[7],
-        )
+    user = UserModel.find_by_id(db_conn, user_id_from_route)
+    if not user:
+        request.response.status_code = 404
+        return {"error": "User not found"}
 
     # Verify current password
     if not user.check_password(current_password):
         request.response.status_code = 400
-        return {"error": "Current password is incorrect"}
+        return {"error": "Invalid old password"}
 
     # Set new password
     user.set_password(new_password)
@@ -285,44 +260,26 @@ def follow(request: Request):
     # Can't follow yourself
     if token == user_to_follow_id:
         request.response.status_code = 400
-        return {"error": "You cannot follow yourself"}
+        return {"error": "You can only follow/unfollow as yourself"}
 
     # Fetch database connector
     db_conn = request.db_conn
 
     # Verify both users exist
-    with db_conn.cursor() as cur:
-        cur.execute("SELECT id FROM users WHERE id = %s", (token,))
-        if not cur.fetchone():
-            request.response.status_code = 404
-            return {"error": "Current user not found"}
+    current_user = UserModel.find_by_id(db_conn, token)
+    if not current_user:
+        request.response.status_code = 404
+        return {"error": "Current user not found"}
 
-        cur.execute("SELECT id FROM users WHERE id = %s", (user_to_follow_id,))
-        if not cur.fetchone():
-            request.response.status_code = 404
-            return {"error": "User to follow not found"}
-
-    # Check if already following
-    with db_conn.cursor() as cur:
-        cur.execute(
-            "SELECT id FROM followers WHERE follower_id = %s AND following_id = %s",
-            (token, user_to_follow_id),
-        )
-        if cur.fetchone():
-            request.response.status_code = 400
-            return {"error": "Already following this user"}
+    target_user = UserModel.find_by_id(db_conn, user_to_follow_id)
+    if not target_user:
+        request.response.status_code = 404
+        return {"error": "User to follow not found"}
 
     try:
-        # Create follow relationship
-        with db_conn.cursor() as cur:
-            cur.execute(
-                """
-                INSERT INTO followers (id, follower_id, following_id, created_at)
-                VALUES (%s, %s, %s, %s)
-                """,
-                (str(uuid.uuid4()), token, user_to_follow_id, datetime.now()),
-            )
-        db_conn.commit()
+        if not UserModel.follow_user(db_conn, token, user_to_follow_id):
+            request.response.status_code = 400
+            return {"error": "Already following this user", "message": "Already following this user"}
 
         return {"message": "Successfully followed user"}
 
@@ -342,29 +299,29 @@ def unfollow(request: Request):
         request.response.status_code = 400
         return {"error": "Token is required"}
 
+    # Can't unfollow yourself
+    if token == user_to_unfollow_id:
+        request.response.status_code = 400
+        return {"error": "You cannot unfollow yourself"}
+
     # Fetch database connector
     db_conn = request.db_conn
 
-    # Check if following relationship exists
-    with db_conn.cursor() as cur:
-        cur.execute(
-            "SELECT id FROM followers WHERE follower_id = %s AND following_id = %s",
-            (token, user_to_unfollow_id),
-        )
-        follow_record = cur.fetchone()
+    # Verify both users exist
+    current_user = UserModel.find_by_id(db_conn, token)
+    if not current_user:
+        request.response.status_code = 404
+        return {"error": "Current user not found"}
 
-        if not follow_record:
-            request.response.status_code = 404
-            return {"error": "Not following this user"}
+    target_user = UserModel.find_by_id(db_conn, user_to_unfollow_id)
+    if not target_user:
+        request.response.status_code = 404
+        return {"error": "User to unfollow not found"}
 
     try:
-        # Remove follow relationship
-        with db_conn.cursor() as cur:
-            cur.execute(
-                "DELETE FROM followers WHERE follower_id = %s AND following_id = %s",
-                (token, user_to_unfollow_id),
-            )
-        db_conn.commit()
+        if not UserModel.unfollow_user(db_conn, token, user_to_unfollow_id):
+            request.response.status_code = 404
+            return {"error": "Not following this user"}
 
         return {"message": "Successfully unfollowed user"}
 
@@ -382,11 +339,10 @@ def get_followers(request: Request):
     db_conn = request.db_conn
 
     # Verify user exists
-    with db_conn.cursor() as cur:
-        cur.execute("SELECT id FROM users WHERE id = %s", (user_id,))
-        if not cur.fetchone():
-            request.response.status_code = 404
-            return {"error": "User not found"}
+    user = UserModel.find_by_id(db_conn, user_id)
+    if not user:
+        request.response.status_code = 404
+        return {"error": "User not found"}
 
     # Get followers
     try:
@@ -435,11 +391,10 @@ def get_following(request: Request):
     db_conn = request.db_conn
 
     # Verify user exists
-    with db_conn.cursor() as cur:
-        cur.execute("SELECT id FROM users WHERE id = %s", (user_id,))
-        if not cur.fetchone():
-            request.response.status_code = 404
-            return {"error": "User not found"}
+    user = UserModel.find_by_id(db_conn, user_id)
+    if not user:
+        request.response.status_code = 404
+        return {"error": "User not found"}
 
     # Get following
     try:

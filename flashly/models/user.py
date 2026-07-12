@@ -206,3 +206,62 @@ class UserModel:
             profile["decks"] = list(decks_dict.values())
 
             return profile
+
+    @classmethod
+    def find_by_id(cls, db_conn, user_id: str) -> Optional["UserModel"]:
+        with db_conn.cursor() as cur:
+            cur.execute(
+                "SELECT id, first_name, last_name, username, email, password_hash, created_at, updated_at FROM users WHERE id = %s",
+                (user_id,),
+            )
+            record = cur.fetchone()
+            if record:
+                return cls(
+                    id=UUID(record[0]),
+                    first_name=record[1],
+                    last_name=record[2],
+                    username=record[3],
+                    email=record[4],
+                    password_hash=record[5],
+                    created_at=record[6],
+                    updated_at=record[7],
+                )
+        return None
+
+    @classmethod
+    def follow_user(cls, db_conn, user_id: str, target_user_id: str) -> bool:
+        # Check if already following
+        with db_conn.cursor() as cur:
+            cur.execute(
+                "SELECT 1 FROM followers WHERE follower_id = %s AND following_id = %s",
+                (user_id, target_user_id),
+            )
+            if cur.fetchone():
+                return False  # Already following
+
+            # Insert new follow relationship
+            cur.execute(
+                "INSERT INTO followers (follower_id, following_id) VALUES (%s, %s)",
+                (user_id, target_user_id),
+            )
+            db_conn.commit()
+        return True
+
+    @classmethod
+    def unfollow_user(cls, db_conn, user_id: str, target_user_id: str) -> bool:
+        # Check if following
+        with db_conn.cursor() as cur:
+            cur.execute(
+                "SELECT 1 FROM followers WHERE follower_id = %s AND following_id = %s",
+                (user_id, target_user_id),
+            )
+            if not cur.fetchone():
+                return False  # Not following
+
+            # Delete follow relationship
+            cur.execute(
+                "DELETE FROM followers WHERE follower_id = %s AND following_id = %s",
+                (user_id, target_user_id),
+            )
+            db_conn.commit()
+        return True
